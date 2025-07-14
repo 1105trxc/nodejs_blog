@@ -1,0 +1,30 @@
+{
+  "name": "blog",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon src/index.js",
+    "watch": "node-sass --watch src/resources/scss/ --output src/public/css/",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/1105trxc/nodejs_blog.git"
+  },
+  "author": "khoatrxc",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/1105trxc/nodejs_blog/issues"
+  },
+  "homepage": "https://github.com/1105trxc/nodejs_blog#readme",
+  "dependencies": {
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "express-handlebars": "^8.0.3",
+    "morgan": "^1.10.0",
+    "node-sass": "^9.0.0",
+    "nodemon": "^3.1.10"
+  }
+}
