@@ -4,9 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "pretty": "lint-staged",
     "start": "nodemon src/index.js",
     "watch": "node-sass --watch src/resources/scss/ --output src/public/css/",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky"
   },
   "repository": {
     "type": "git",
@@ -19,13 +21,8 @@
   },
   "homepage": "https://github.com/1105trxc/nodejs_blog#readme",
   "lint-staged": {
-    "src/**/*.{js,json,scss}": "prettier --single-quote --trailing-comma all --write"
-  },
-  "husky": {
-    "hook" : {
-      "pre-commit": "lint-staged"
-    }
-  },
+  "src/**/*.{js,json,scss}": "prettier --single-quote --trailing-comma all --write"
+},
   "dependencies": {
     "express": "^5.1.0"
   },
