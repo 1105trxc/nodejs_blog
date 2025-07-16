@@ -18,13 +18,24 @@
     "url": "https://github.com/1105trxc/nodejs_blog/issues"
   },
   "homepage": "https://github.com/1105trxc/nodejs_blog#readme",
+  "lint-staged": {
+    "src/**/*.{js,json,scss}": "prettier --single-quote --trailing-comma all --write"
+  },
+  "husky": {
+    "hook" : {
+      "pre-commit": "lint-staged"
+    }
+  },
   "dependencies": {
     "express": "^5.1.0"
   },
   "devDependencies": {
     "express-handlebars": "^8.0.3",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.2",
     "morgan": "^1.10.0",
     "node-sass": "^9.0.0",
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "prettier": "^3.6.2"
   }
 }
