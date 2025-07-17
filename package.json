@@ -26,6 +26,7 @@
   "dependencies": {
     "express": "^5.1.0",
     "install": "^0.13.0",
+    "method-override": "^3.0.0",
     "mongoose": "^8.16.3",
     "mongoose-slug-generator": "^1.0.4",
     "npm": "^11.4.2"
