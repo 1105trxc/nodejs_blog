@@ -21,10 +21,14 @@
   },
   "homepage": "https://github.com/1105trxc/nodejs_blog#readme",
   "lint-staged": {
-  "src/**/*.{js,json,scss}": "prettier --single-quote --trailing-comma all --write"
-},
+    "src/**/*.{js,json,scss}": "prettier --single-quote --trailing-comma all --write"
+  },
   "dependencies": {
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "install": "^0.13.0",
+    "mongoose": "^8.16.3",
+    "mongoose-slug-generator": "^1.0.4",
+    "npm": "^11.4.2"
   },
   "devDependencies": {
     "express-handlebars": "^8.0.3",
