@@ -20,13 +20,22 @@
       </div>
     </div>
     <table class="table  mt-4">
-        <thead>
+       <thead>
             <tr>
                 <th scope="col"></th> 
-                <th scope="col">#</th>
-                <th scope="col">Name's courses</th>
-                <th scope="col">Level</th>
-                <th scope="col" colspan="2">Date</th>
+                <th scope="col">
+                  ID {{{sortable '_id' _sort}}}
+                  </th>
+                <th scope="col">
+                    {{!-- Giữ tiêu đề và helper trên cùng một dòng để tránh khoảng trắng thừa --}}
+                    Name's courses {{{sortable 'name' _sort}}}
+                </th>
+                <th scope="col">
+                    Level {{{sortable 'level' _sort}}}
+                </th>
+                <th scope="col" colspan="2">
+                    Date {{{sortable 'createdAt' _sort}}}
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -38,7 +47,7 @@
                      
                   </div>
               </td>
-            <th scope="row">{{sum @index 1}}</th>
+                <th>{{this._id}}</th>
                 <td>{{this.name}}</td>
                 <td>{{this.level}}</td>
                 <td>{{this.createdAt}}</td>
