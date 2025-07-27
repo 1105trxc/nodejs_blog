@@ -1,0 +1,35 @@
+{{!-- src/resources/views/admin/users.hbs --}}
+
+<div class="mt-4">
+    <h3>Quản lý Người dùng</h3>
+
+    <table class="table mt-4">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Username</th>
+                <th scope="col">Role</th>
+                <th scope="col">Ngày tạo</th>
+                <th scope="col">Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each users}}
+                <tr>
+                    <th scope="row">{{sum @index 1}}</th>
+                    <td>{{this.username}}</td>
+                    <td>{{this.role}}</td>
+                    <td>{{this.createdAt}}</td>
+                    <td>
+                        <a href="#" class="btn btn-link">Sửa</a>
+                        <a href="#" class="btn btn-link">Xóa</a>
+                    </td>
+                </tr>
+            {{else}}
+                <tr>
+                    <td colspan="5" class="text-center">Chưa có người dùng nào.</td>
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>

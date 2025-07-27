@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 
 const courseControllers = require('../app/controllers/CourseController');
+const { requireAuth } = require('../app/middlewares/authMiddleware');
+
+router.use(requireAuth);
 
 router.get('/create', courseControllers.create);
 router.post('/store', courseControllers.store);

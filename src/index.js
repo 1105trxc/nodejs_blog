@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const morgan = require('morgan');
 const handlebars = require('express-handlebars');
 const methodOverride = require('method-override');
+const session = require('express-session');
 
 const sortMiddleware = require('./app/middlewares/sortMiddleware');
 
@@ -18,6 +19,7 @@ db.connect();
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+//Băm mật khẩu
 app.use(
   express.urlencoded({
     extended: true,
@@ -25,6 +27,21 @@ app.use(
 );
 app.use(express.json());
 app.use(methodOverride('_method'));
+
+//Session middleware
+app.use(
+  session({
+    secret: 'a-very-strong-secret-key', // Thay thế bằng một chuỗi bí mật ngẫu nhiên và mạnh
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }, // Đặt là true nếu bạn dùng HTTPS
+  }),
+);
+
+app.use((req, res, next) => {
+  res.locals.user = req.session.user; // Truyền thông tin user từ session vào res.locals
+  next();
+});
 
 //Custom middlewares
 app.use(sortMiddleware);
@@ -64,6 +81,13 @@ app.engine(
                 <i class="${icon}"></i>
             </a>
         `;
+      },
+      if_eq: function (a, b, opts) {
+        if (a === b) {
+          return opts.fn(this);
+        } else {
+          return opts.inverse(this);
+        }
       },
     },
   }),

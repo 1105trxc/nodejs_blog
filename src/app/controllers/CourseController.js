@@ -18,12 +18,13 @@ class CourseController {
 
   //[POST] /courses/store
   store(req, res, next) {
-    req.body.img = `https://i.ytimg.com/vi/${req.body.vdID}/hq720.jpg?sqp=-oaymwEXCNAFEJQDSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLBPNHhLkUbAXMNx892fF7WRFDlnCw`;
-    const course = new Course(req.body);
+    const formData = req.body;
+    formData.img = `https://img.youtube.com/vi/${req.body.vdID}/hqdefault.jpg`;
+    const course = new Course(formData);
     course
       .save()
       .then(() => res.redirect('/me/stored/courses'))
-      .catch((error) => {});
+      .catch(next);
   }
 
   //[GET] /courses/:id/edit
@@ -39,7 +40,10 @@ class CourseController {
 
   //[PUT] /courses/:id/
   update(req, res, next) {
-    Course.updateOne({ _id: req.params.id }, req.body)
+    const formData = req.body;
+    formData.img = `https://img.youtube.com/vi/${req.body.vdID}/hqdefault.jpg`;
+
+    Course.updateOne({ _id: req.params.id }, formData)
       .then(() => res.redirect('/me/stored/courses'))
       .catch(next);
   }
