@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt'); // Import bcrypt để mã hóa
 const Schema = mongoose.Schema;
+const mongooseDelete = require('mongoose-delete');
 
 const UserSchema = new Schema(
   {
@@ -26,6 +27,11 @@ const UserSchema = new Schema(
     timestamps: true, // Giữ lại timestamps để biết user được tạo khi nào
   },
 );
+
+UserSchema.plugin(mongooseDelete, {
+  deletedAt: true, // Thêm trường lưu thời gian xóa
+  overrideMethods: 'all',
+});
 
 // Thêm Middleware để tự động MÃ HÓA MẬT KHẨU trước khi lưu
 // Đây là chức năng quan trọng nhất của User model

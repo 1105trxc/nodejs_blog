@@ -1,35 +1,111 @@
 {{!-- src/resources/views/admin/users.hbs --}}
 
-<div class="mt-4">
-    <h3>Quản lý Người dùng</h3>
+<form class="mt-4" name="container-form" method="POST" action="/admin/handle-form-actions">
+    <div>
+        <h3>Quản lý Người dùng</h3>
+        {{!-- Sau này bạn sẽ thêm chức năng thùng rác cho user nếu cần --}}
+        {{!-- <a href="/admin/trash/users">Bin ({{this.deletedCount}})</a> --}}
 
+        <div class="mt-4 d-flex align-items-center">
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="checkbox-all">
+                <label class="custom-control-label" for="checkbox-all">Chọn tất cả</label>
+            </div>
+
+            <select class="form-control form-control-sm select-all-options" name="action" required>
+                <option value="">-- Chọn hành động --</option>
+                <option value="delete">Xóa (Xóa mềm)</option>
+            </select>
+
+            <button class="btn btn-primary btn-sm apply-btn" disabled>Áp dụng</button>
+        </div>
+    </div>
     <table class="table mt-4">
         <thead>
             <tr>
-                <th scope="col">#</th>
-                <th scope="col">Username</th>
-                <th scope="col">Role</th>
-                <th scope="col">Ngày tạo</th>
-                <th scope="col">Hành động</th>
+                <th></th>
+                <th>#</th>
+                <th>Username {{{sortable 'username' _sort}}}</th>
+                <th>Role {{{sortable 'role' _sort}}}</th>
+                <th>Ngày tạo {{{sortable 'createdAt' _sort}}}</th>
+                <th>Hành động</th>
             </tr>
         </thead>
         <tbody>
             {{#each users}}
-                <tr>
-                    <th scope="row">{{sum @index 1}}</th>
-                    <td>{{this.username}}</td>
-                    <td>{{this.role}}</td>
-                    <td>{{this.createdAt}}</td>
-                    <td>
-                        <a href="#" class="btn btn-link">Sửa</a>
-                        <a href="#" class="btn btn-link">Xóa</a>
-                    </td>
-                </tr>
+            <tr>
+                <td>
+                    <div class="custom-control custom-checkbox">
+                        {{!-- SỬA LẠI NAME --}}
+                        <input type="checkbox" class="form-check-input" name="userIds[]" value="{{this._id}}">
+                    </div>
+                </td>
+                <th scope="row">{{sum @index 1}}</th>
+                {{!-- SỬA LẠI TÊN TRƯỜNG --}}
+                <td>{{this.username}}</td>
+                <td>{{this.role}}</td>
+                <td>{{this.createdAt}}</td>
+                <td>
+                    <a href="/admin/users/{{this._id}}/edit" class="btn btn-link">Sửa</a>
+                    {{!-- SỬA LẠI CÁC LỖI GÕ CHỮ --}}
+                    <a href="" class="btn btn-link" data-toggle="modal" data-id="{{this._id}}" data-target="#delete-user-modal">Delete</a>
+                </td>
+            </tr>
             {{else}}
-                <tr>
-                    <td colspan="5" class="text-center">Chưa có người dùng nào.</td>
-                </tr>
+            {{!-- THÊM KHỐI ELSE --}}
+            <tr>
+                <td colspan="6" class="text-center">Chưa có người dùng nào trong hệ thống.</td>
+            </tr>
             {{/each}}
         </tbody>
     </table>
+</form>
+
+{{!-- Modal xác nhận xóa (Đã sửa lại các ID) --}}
+<div id="delete-user-modal" class="modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">DELETE USER?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure delete this user?</p>
+      </div>
+      <div class="modal-footer">
+        <button id="btn-delete-user" type="button" class="btn btn-danger">Yes</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
 </div>
+
+{{!-- Form ẩn để xóa --}}
+<form name="delete-user-form" method="POST"></form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let userId; 
+        const deleteForm = document.forms['delete-user-form'];
+        const containerForm = document.forms['container-form'];
+        const deleteUserModal = $('#delete-user-modal'); 
+        const btnDeleteUser = $('#btn-delete-user');
+        const checkBoxAll = $('#checkbox-all');
+        const userItemCheckBox = $('input[name="userIds[]"]');
+        const applyBtn = $('.apply-btn');
+
+        deleteUserModal.on('show.bs.modal', function (event) {
+            const button = $(event.relatedTarget);
+            userId = button.data('id'); // Dùng .data('id') của jQuery tiện hơn
+        });
+
+        btnDeleteUser.on('click', function() {
+            // SỬA LẠI URL CHO ĐÚNG VỚI ROUTER CỦA ADMIN
+            deleteForm.action = `/admin/users/${userId}?_method=DELETE`; 
+            deleteForm.submit();
+        });
+    })
+
+</script>
