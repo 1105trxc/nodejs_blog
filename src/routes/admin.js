@@ -6,8 +6,7 @@ const { requireAdmin } = require('../app/middlewares/authMiddleware');
 
 router.use(requireAdmin);
 
-router.post('/handle-form-actions', adminController.handleFormActions);
 router.get('/stored/users', adminController.storedUsers);
-router.delete('/users/:id/', adminController.delete);
+router.get('/trash/users', adminController.trashUsers);
 
 module.exports = router;

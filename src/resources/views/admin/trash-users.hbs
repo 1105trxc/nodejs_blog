@@ -1,8 +1,8 @@
-
 <form class="mt-4" name="container-form" method="POST" action="/admin/handle-form-actions">
     <div>
-        <h3>Quản lý Người dùng</h3>
-        <a href="/admin/trash/users">Bin ({{this.deletedCount}})</a> 
+        <a href="/admin/stored/users">User list</a>
+
+        <h3>My deleted users</h3>
 
         <div class="mt-4 d-flex align-items-center">
             <div class="custom-control custom-checkbox">
@@ -11,11 +11,12 @@
             </div>
 
             <select class="form-control form-control-sm select-all-options" name="action" required>
-                <option value="">-- Chọn hành động --</option>
-                <option value="delete">Xóa (Xóa mềm)</option>
+                <option value="">-- Open this selection --</option>
+                <option value="restore">Restore</option>
+                <option value="fDelete">Permanently delete</option>
             </select>
 
-            <button class="btn btn-primary btn-sm apply-btn" disabled>Áp dụng</button>
+            <button class="btn btn-primary btn-sm apply-btn" disabled>Apply</button>
         </div>
     </div>
     <table class="table mt-4">
@@ -44,7 +45,7 @@
                 <td>{{this.role}}</td>
                 <td>{{this.createdAt}}</td>
                 <td>
-                    <a href="/admin/users/{{this._id}}/edit" class="btn btn-link">Sửa</a>
+                     <a href="" class="btn btn-link btn-restore" data-id="{{this._id}}">Restore</a>
                     {{!-- SỬA LẠI CÁC LỖI GÕ CHỮ --}}
                     <a href="" class="btn btn-link" data-toggle="modal" data-id="{{this._id}}" data-target="#delete-user-modal">Delete</a>
                 </td>
@@ -82,14 +83,16 @@
 
 {{!-- Form ẩn để xóa --}}
 <form name="delete-user-form" method="POST"></form>
+<form name="restore-user-form" method="POST"></form>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         let userId; 
         const deleteForm = document.forms['delete-user-form'];
-        const containerForm = document.forms['container-form'];
+        const restoreForm = document.forms['restore-user-form'];
         const deleteUserModal = $('#delete-user-modal'); 
         const btnDeleteUser = $('#btn-delete-user');
+        const btnRestoreUser = $('.btn-restore')
         const checkBoxAll = $('#checkbox-all');
         const userItemCheckBox = $('input[name="userIds[]"]');
         const applyBtn = $('.apply-btn');
@@ -100,10 +103,18 @@
         });
 
         btnDeleteUser.on('click', function() {
-            // SỬA LẠI URL CHO ĐÚNG VỚI ROUTER CỦA ADMIN
-            deleteForm.action = `/users/${userId}?_method=DELETE`; 
+            deleteForm.action = `/admin/users/${userId}?_method=DELETE`; 
             deleteForm.submit();
         });
+
+        // Restore btn clicked
+        btnRestoreUser.click(function(e) {
+          e.preventDefault();
+         var userId = $(this).data('id');
+        restoreForm.action = `/users/${userId}/restore?_method=PATCH`;
+        restoreForm.submit();
+        })
+
     })
 
 </script>
