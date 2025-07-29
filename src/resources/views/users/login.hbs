@@ -1,19 +1,51 @@
-<div class="row justify-content-center mt-4">
-    <div class="col-md-6">
-        <h2>Login</h2>
-        {{#if error}}
-            <div class="alert alert-danger">{{error}}</div>
-        {{/if}}
-        <form method="POST" action="/users/login">
-            <div class="mb-3">
-                <label for="username" class="form-label">Username</label>
-                <input type="text" class="form-control" id="username" name="username" value="{{values.username}}" required>
+{{!-- src/resources/views/users/login.hbs --}}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow-sm">
+            <div class="card-header text-center bg-primary text-white">
+                <h3 class="my-2">Sign In to Your Account</h3>
             </div>
-            <div class="mb-3">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" name="password" required>
+            <div class="card-body p-4">
+
+                {{#if error}}
+                    <div class="alert alert-danger">{{error}}</div>
+                {{/if}}
+
+                <form method="POST" action="/users/login">
+                    {{!-- Username Input with Icon --}}
+                    <div class="form-group mb-3">
+                        <label for="username">Username</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" value="{{values.username}}" required>
+                        </div>
+                    </div>
+
+                    {{!-- Password Input with Icon --}}
+                    <div class="form-group mb-4">
+                        <label for="password">Password</label>
+                        <div class="input-group">
+                             <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            </div>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                </form>
+
+                <div class="text-center my-3">
+                    <hr>
+                    <small class="text-muted">Don't have an account?</small>
+                </div>
+                
+                <a href="/users/register" class="btn btn-secondary btn-block">Create an Account</a>
+
             </div>
-            <button type="submit" class="btn btn-primary">Login</button>
-        </form>
+        </div>
     </div>
 </div>

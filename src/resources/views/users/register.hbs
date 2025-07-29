@@ -1,19 +1,72 @@
-<div class="row justify-content-center mt-4">
-    <div class="col-md-6">
-        <h2>Sign in</h2>
-        {{#if error}}
-            <div class="alert alert-danger">{{error}}</div>
-        {{/if}}
-        <form method="POST" action="/users/register">
-            <div class="mb-3">
-                <label for="username" class="form-label">Username</label>
-                <input type="text" class="form-control" id="username" name="username" value="{{values.username}}" required>
+{{!-- src/resources/views/users/register.hbs --}}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow-sm">
+            <div class="card-header text-center bg-primary text-white">
+                <h3 class="my-2">Create Your Account</h3>
             </div>
-            <div class="mb-3">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" name="password" required>
+            <div class="card-body p-4">
+
+                {{#if error}}
+                    <div class="alert alert-danger">{{error}}</div>
+                {{/if}}
+
+                <form method="POST" action="/users/register" id="form-1">
+                    {{!-- Username Input with Icon --}}
+                    <div class="form-group mb-3">
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" value="{{values.username}}" required>
+                        <span class ="form-message"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="email">Email</label>
+                        <input type="text" class="form-control" id="email" name="email" placeholder="Enter your email" value="{{values.email}}" required>
+                        <span class ="form-message"></span>
+                    </div>
+
+                    {{!-- Password Input with Icon --}}
+                    <div class="form-group mb-3">
+                        <label for="password">Password</label> 
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+                        <span class ="form-message"></span>
+                    </div>
+                    
+                    {{!-- Confirm Password Input --}}
+                    <div class="form-group mb-4">
+                        <label for="passwordConfirm">Confirm Password</label>
+                        <input type="password" class="form-control" id="passwordConfirm" name="passwordConfirm" placeholder="Confirm your password" required>
+                        <span class ="form-message"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">Register</button>
+                </form>
+
+                <div class="text-center my-3">
+                    <hr>
+                    <small class="text-muted">Already have an account?</small>
+                </div>
+                
+                <a href="/users/login" class="btn btn-secondary btn-block">Sign In Here</a>
+
             </div>
-            <button type="submit" class="btn btn-primary">Sign in</button>
-        </form>
+        </div>
     </div>
 </div>
+
+<script src="/js/validator.js"></script>
+
+<script>
+    Validator ({
+        form: '#form-1',
+        errorSelector: '.form-message',
+        rules: [
+            Validator.isRequired('#username'),
+            Validator.isEmail('#email'), 
+            Validator.minLength('#password', 6),
+            Validator.isConfirmed('#passwordConfirm'),
+        ],
+
+        })
+</script>
