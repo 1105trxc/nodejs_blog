@@ -1,13 +1,27 @@
 function Validator(options) {
+  var selectorRules = {};
+
   //lay element cua form can validate
   var formElement = document.querySelector(options.form);
 
   //ham thuc hien validate
   function validate(inputElement, rule) {
-    var errorMessage = rule.test(inputElement.value);
+    var errorMessage;
     var errorElement = inputElement.parentElement.querySelector(
       options.errorSelector,
     );
+
+    //Lay ra cac rule cua selector
+    var rules = selectorRules[rule.selector];
+
+    //Lap qua tung rule & kiem tra
+    //Neu co loi thi dung viec kiem tra
+    for (var i = 0; i < rules.length; i++) {
+      errorMessage = rules[i](inputElement.value);
+      if (errorMessage) {
+        break;
+      }
+    }
 
     if (errorMessage) {
       errorElement.innerText = errorMessage;
@@ -20,6 +34,13 @@ function Validator(options) {
 
   if (formElement) {
     options.rules.forEach((rule) => {
+      //Luu lai cac rule cua moi input
+      if (Array.isArray(selectorRules[rule.selector])) {
+        selectorRules[rule.selector].push(rule.test);
+      } else {
+        selectorRules[rule.selector] = [rule.test];
+      }
+
       var inputElement = formElement.querySelector(rule.selector);
 
       if (inputElement) {
@@ -41,11 +62,11 @@ function Validator(options) {
   }
 }
 
-Validator.isRequired = function (selector) {
+Validator.isRequired = function (selector, message) {
   return {
     selector: selector,
     test: function (value) {
-      return value.trim() ? undefined : 'Please fill out';
+      return value.trim() ? undefined : message || 'Please fill out';
     },
   };
 };
@@ -58,6 +79,8 @@ Validator.isEmail = function (selector) {
       return regex.test(value) ? undefined : 'Please fill out email';
     },
   };
+  s;
+  Email;
 };
 
 Validator.minLength = function (selector, min) {
@@ -70,15 +93,12 @@ Validator.minLength = function (selector, min) {
     },
   };
 };
-var passwordInput = document.getElementById('password');
 
-Validator.isConfirmed = function (selector) {
+Validator.isConfirmed = function (selector, getConfirmValue) {
   return {
     selector: selector,
     test: function (value) {
-      return value === passwordInput.value
-        ? undefined
-        : 'Passwords do not match';
+      return value === getConfirmValue() ? undefined : 'Passwords do not match';
     },
   };
 };

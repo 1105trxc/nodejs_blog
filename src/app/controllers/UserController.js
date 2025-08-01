@@ -22,6 +22,7 @@ class UserController {
       // Model sẽ tự động lo việc mã hóa
       const user = new User({
         username: req.body.username,
+        email: req.body.email,
         password: req.body.password, // Cứ truyền mật khẩu thuần vào đây
       });
 
