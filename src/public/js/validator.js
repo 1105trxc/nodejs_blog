@@ -1,15 +1,26 @@
 function Validator(options) {
   var selectorRules = {};
 
+  //Lay element cha
+  function getParent(element, selector) {
+    while (element.parentElement) {
+      if (element.parentElement.matches(selector)) {
+        return element.parentElement;
+      }
+      element = element.parentElement;
+    }
+  }
+
   //lay element cua form can validate
   var formElement = document.querySelector(options.form);
 
   //ham thuc hien validate
   function validate(inputElement, rule) {
     var errorMessage;
-    var errorElement = inputElement.parentElement.querySelector(
-      options.errorSelector,
-    );
+    var errorElement = getParent(
+      inputElement,
+      options.formGroupSelector,
+    ).querySelector(options.errorSelector);
 
     //Lay ra cac rule cua selector
     var rules = selectorRules[rule.selector];
@@ -17,7 +28,14 @@ function Validator(options) {
     //Lap qua tung rule & kiem tra
     //Neu co loi thi dung viec kiem tra
     for (var i = 0; i < rules.length; i++) {
-      errorMessage = rules[i](inputElement.value);
+      switch (inputElement.type) {
+        case 'radio':
+        case 'checkbox':
+          errorMessage = rules[i](
+            formElement.querySelector(rule.selector + ':checked'),
+          );
+      }
+
       if (errorMessage) {
         break;
       }
@@ -25,13 +43,35 @@ function Validator(options) {
 
     if (errorMessage) {
       errorElement.innerText = errorMessage;
-      inputElement.parentElement.classList.add('invalid');
+      getParent(inputElement, options.formGroupSelector).classList.add(
+        'invalid',
+      );
     } else {
       errorElement.innerText = '';
-      inputElement.parentElement.classList.remove('invalid');
+      getParent(inputElement, options.formGroupSelector).classList.remove(
+        'invalid',
+      );
     }
   }
 
+  if (isFormValid) {
+    //Case submit voi Js
+    if (typeof options.onsubmit === 'function') {
+      var enableInputs = formElement.querySelectorAll();
+      var formValues = Array.from(enableInputs).reduce(function (values) {
+        values[input.name] = input.value;
+        return values;
+      }, {});
+      options.onSubmit(formValues);
+    }
+
+    //Case submit voi hanh vi mac dinh
+    else {
+      formElement.submit();
+    }
+  }
+
+  //Lap qua moi rule va xu ly
   if (formElement) {
     options.rules.forEach((rule) => {
       //Luu lai cac rule cua moi input
@@ -41,9 +81,8 @@ function Validator(options) {
         selectorRules[rule.selector] = [rule.test];
       }
 
-      var inputElement = formElement.querySelector(rule.selector);
-
-      if (inputElement) {
+      var inputElements = formElement.querySelectorAll(rule.selector);
+      Array.from(inputElements).forEach(function (inputElement) {
         //xu ly truong hop blur ra khoi input
         inputElement.onblur = function () {
           validate(inputElement, rule);
@@ -51,13 +90,16 @@ function Validator(options) {
 
         //xu ly truong hop moi khi nguoi dung nhap vao input
         inputElement.oninput = function () {
-          var errorElement = inputElement.parentElement.querySelector(
-            options.errorSelector,
-          );
+          var errorElement = getParent(
+            inputElement,
+            options.formGroupSelector,
+          ).querySelector(options.errorSelector);
           errorElement.innerText = '';
-          inputElement.parentElement.classList.remove('invalid');
+          getParent(inputElement, options.formGroupSelector).classList.remove(
+            'invalid',
+          );
         };
-      }
+      });
     });
   }
 }
@@ -66,7 +108,7 @@ Validator.isRequired = function (selector, message) {
   return {
     selector: selector,
     test: function (value) {
-      return value.trim() ? undefined : message || 'Please fill out';
+      return value ? undefined : message || 'Please fill out';
     },
   };
 };
@@ -79,8 +121,6 @@ Validator.isEmail = function (selector) {
       return regex.test(value) ? undefined : 'Please fill out email';
     },
   };
-  s;
-  Email;
 };
 
 Validator.minLength = function (selector, min) {
