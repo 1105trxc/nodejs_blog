@@ -43,10 +43,10 @@
                     <div class="form-group mb-4">
                         <label for="gender">Select gender</label>
                         <div>
-                            <input class="ml-5 mt-3" type="checkbox" name="gender" value="male"> Male
+                            <input class="ml-5 mt-3" type="radio" name="gender" value="male"> Male
                         </div>
                         <div>
-                            <input class="ml-5 mt-3" type="checkbox" name="gender" value="female"> Female
+                            <input class="ml-5 mt-3" type="radio" name="gender" value="female"> Female
                         </div>
                         
                         <span class ="form-message"></span>
@@ -66,6 +66,16 @@
         </div>
     </div>
 </div>
+
+<style>
+    .form-message {
+        color: red;
+    }
+
+    .form-control-color {
+        border-color: red;
+    }
+</style>
 
 <script src="/js/validator.js"></script>
 
